@@ -16,3 +16,10 @@ export interface IAuthState {
   token: string | null;
   isAuthenticated: boolean;
 }
+
+export interface LoginFormData {
+  email: string;
+  phone: string;
+  password: string;
+}
+  

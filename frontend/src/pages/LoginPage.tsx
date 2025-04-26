@@ -1,14 +1,15 @@
 import configAxios from "../services/axiosConfig";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; 
 import { loginSuccess } from "../redux/slices/authSlice";
+import { LoginFormData } from "../types/types";
 
-const LoginPage = () => {
+const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [tab, setTab] = useState("email");
-  const [formData, setFormData] = useState({
+  const [tab, setTab] = useState<"email" | "phone">("email");
+  const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     phone: "",
     password: "",
@@ -16,11 +17,11 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");  
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };  
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -35,7 +36,7 @@ const LoginPage = () => {
       dispatch(loginSuccess({ user: userData, token }));
       navigate("/dashboard", { replace: true });
 
-    } catch (error) {
+    } catch (error: any) {
       setError(error.response.data.message);
     } finally {
       setLoading(false);
