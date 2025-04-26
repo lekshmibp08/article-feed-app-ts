@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hide Scrollbars for Webkit Browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+  }
+  
+  /* Optional: Hide scrollbar track (background) */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  /* Optional: Hide scrollbar thumb (scroll handle) */
+  ::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 0;
+  }
+  
+  /* Hide Scrollbars for Firefox */
+  * {
+    scrollbar-width: none;
+  }
+  
+  /* Hide Scrollbars for Internet Explorer & Edge */
+  body {
+    -ms-overflow-style: none;
+  }
+  
