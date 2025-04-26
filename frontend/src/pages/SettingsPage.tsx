@@ -16,33 +16,39 @@ import {
   validatePreferences 
 } from "../utils/validateUserInfo";
 import { updateUser } from "../redux/slices/authSlice";
+import { RootState } from "../redux/store";
+import { 
+  Category, 
+  IPasswordChange,
+  IPersonalInfo 
+} from "../types/types";
 
 function SettingsPage() {
-  const user = useSelector((state) => state.auth.user)
+  const user = useSelector((state: RootState) => state.auth.user)
   const dispatch = useDispatch();
-  const [activeTab, setActiveTab] = useState("personal")
+  const [activeTab, setActiveTab] = useState<"personal" | "preferences">("personal")
 
-  const [personalInfo, setPersonalInfo] = useState({
-    firstName: user.firstName || "",
-    lastName: user.lastName || "",
-    email: user.email || "",
-    phone: user.phone || "",
+  const [personalInfo, setPersonalInfo] = useState<IPersonalInfo>({
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
+    phone: user?.phone || "",
   });
-  const [personalErrors, setPersonalErrors] = useState({});
+  const [personalErrors, setPersonalErrors] = useState<Partial<Record<keyof IPersonalInfo, string>>>({});
 
-  const [passwordInfo, setPasswordInfo] = useState({
+  const [passwordInfo, setPasswordInfo] = useState<IPasswordChange>({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   })
-  const [passwordErrors, setPasswordErrors] = useState({});
+  const [passwordErrors, setPasswordErrors] = useState<Partial<Record<keyof IPasswordChange, string>>>({});
 
-  const categories = ["Sports", "Politics", "Technology", "Space", "Health", "Entertainment", "Science", "Business"]
-  const [selectedCategories, setSelectedCategories] = useState(user.preferences || []);
-  const [preferenceError, setPreferenceError] = useState(null);
+  const categories: Category[] = ["Sports", "Politics", "Technology", "Space", "Health", "Entertainment", "Science", "Business"]
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>(user?.preferences || []);
+  const [preferenceError, setPreferenceError] = useState<string | null>(null);
 
 
-  const handlePersonalInfoChange = (e) => {
+  const handlePersonalInfoChange = (e: any) => {
     const { name, value } = e.target
     setPersonalInfo((prev) => ({
       ...prev,
@@ -54,7 +60,7 @@ function SettingsPage() {
     }));
   }
 
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e: any) => {
     const { name, value } = e.target
     setPasswordInfo((prev) => ({
       ...prev,
@@ -66,7 +72,7 @@ function SettingsPage() {
     }));
   }
 
-  const handleCategoryChange = (category) => {
+  const handleCategoryChange = (category: Category) => {
     setSelectedCategories((prev) => {
       if (prev.includes(category)) {
         return prev.filter((c) => c !== category)
@@ -107,7 +113,7 @@ function SettingsPage() {
         confirmPassword: "",
       });   
       toast.success("Password Reset Successfully!", { position: "top-center" });
-    } catch (error) {     
+    } catch (error: any) {     
       toast.error(error.response.data.message, { position: "top-center" });
     }
   }
@@ -131,7 +137,8 @@ function SettingsPage() {
     <DashboardLayout>
       <div className="space-y-6">
         <h1 className="text-2xl font-bold">Settings</h1>
-
+        { user && 
+        
         <Tabs>
           <div className="flex space-x-1 rounded-lg bg-gray-100 p-1 mb-6">
             <button
@@ -288,6 +295,7 @@ function SettingsPage() {
             </Card>
           )}
         </Tabs>
+        }
       </div>
     </DashboardLayout>
   )
