@@ -28,8 +28,8 @@ export interface IAuthState {
 }
 
 export interface LoginFormData {
-  email: string;
-  phone: string;
+  email?: string;
+  phone?: string;
   password: string;
 }
 

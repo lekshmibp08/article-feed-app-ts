@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom"; 
 import { loginSuccess } from "../redux/slices/authSlice";
 import { LoginFormData } from "../types/types";
+import { loginUser } from "../api/userApi";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ const LoginPage: React.FC = () => {
       : { phone: formData.phone, password: formData.password };
 
     try {
-      const response = await configAxios.post(`/api/login`, payload)
+      const response = await loginUser(payload);
       const { token, userData } = response.data;
       dispatch(loginSuccess({ user: userData, token }));
       navigate("/dashboard", { replace: true });
