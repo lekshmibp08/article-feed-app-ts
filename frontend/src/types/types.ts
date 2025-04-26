@@ -22,4 +22,17 @@ export interface LoginFormData {
   phone: string;
   password: string;
 }
+
+export interface IPersonalInfo {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+}
+
+export interface IPasswordChange {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
   

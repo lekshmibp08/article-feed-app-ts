@@ -1,5 +1,7 @@
-export const validatePersonalInfo = (data) => {
-    const errors = {};
+import { IPersonalInfo, IPasswordChange } from "../types/types";
+
+export const validatePersonalInfo = (data: IPersonalInfo): Partial<Record<keyof IPersonalInfo, string>> => {
+    const errors: Partial<Record<keyof IPersonalInfo, string>> = {};
     
     if (!data.firstName.trim()) errors.firstName = "First name is required.";
     if (!data.lastName.trim()) errors.lastName = "Last name is required.";
@@ -21,8 +23,8 @@ export const validatePersonalInfo = (data) => {
     return errors;
 };
   
-  export const validatePasswordChange = (data) => {
-    const errors = {};
+  export const validatePasswordChange = (data: IPasswordChange): Partial<Record<keyof IPasswordChange, string>> => {
+    const errors: Partial<Record<keyof IPasswordChange, string>> = {};
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
   
     if (!data.currentPassword.trim()) errors.currentPassword = "Current password is required.";
@@ -36,7 +38,7 @@ export const validatePersonalInfo = (data) => {
     return errors;
 };
   
-  export const validatePreferences = (preferences) => {
+  export const validatePreferences = (preferences: string[]): string | null => {
     if (preferences.length === 0) return "At least one preference must be selected.";
     return null;
 };
