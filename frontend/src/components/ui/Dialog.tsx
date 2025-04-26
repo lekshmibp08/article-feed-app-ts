@@ -1,6 +1,13 @@
 import { useEffect } from "react"
 
-function Dialog({ isOpen, onClose, title, children }) {
+interface IDialogProps {
+  isOpen: any;
+  onClose: any;
+  title: any;
+  children: any;
+}
+
+function Dialog({ isOpen, onClose, title, children }: IDialogProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden"

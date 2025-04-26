@@ -9,33 +9,37 @@ import { useSelector } from "react-redux"
 import configAxios from "../services/axiosConfig"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
+import { RootState } from "../redux/store";
+import { Article } from "../types/types"
 
 
 function MyArticlesPage() {
-  const user = useSelector((state) => state.auth.user)
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const user = useSelector((state: RootState) => state.auth.user)
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const [articleToDelete, setArticleToDelete] = useState(null)
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false)
+  const [articleToDelete, setArticleToDelete] = useState<string | null>(null)
 
-  const [selectedArticle, setSelectedArticle] = useState(null)
-  const [showDialog, setShowDialog] = useState(false)
-  const openArticleDialog = (article) => {
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null)
+  const [showDialog, setShowDialog] = useState<boolean>(false)
+  const openArticleDialog = (article: Article) => {
     setSelectedArticle(article)
     setShowDialog(true)
   }
 
   const fetchArticles = async () => {
-    try {
-        const response = await configAxios.get(`/api/my-articles/${user._id}`);
-        setArticles(response.data);
-    } catch (error) {
-        setError("Failed to load articles.")
-        console.error("Error fetching articles:", error)
-    } finally {
-        setLoading(false)
+    if(user?._id) {
+      try {
+          const response = await configAxios.get(`/api/my-articles/${user._id}`);
+          setArticles(response.data);
+      } catch (error) {
+          setError("Failed to load articles.")
+          console.error("Error fetching articles:", error)
+      } finally {
+          setLoading(false)
+      }
     }
   }
 
@@ -50,7 +54,7 @@ function MyArticlesPage() {
     try {
         await configAxios.delete(`/api/articles/${articleToDelete}`);
         setArticles((prevArticles) =>
-            prevArticles.filter((article) => article._id !== articleToDelete)
+            prevArticles.filter((article: Article) => article._id !== articleToDelete)
         );
         setShowDeleteDialog(false)
         setArticleToDelete(null)  
@@ -60,7 +64,7 @@ function MyArticlesPage() {
     }      
   }
 
-  const handlePublish = async (articleId) => {
+  const handlePublish = async (articleId: string) => {
     try {
       const response = await configAxios.patch(`/api/articles/publish/${articleId}`);
       
@@ -95,7 +99,7 @@ function MyArticlesPage() {
       ) : (
       <div className="grid gap-6 mt-6">
         {articles.map((article) => (
-          <Card key={article.id}>
+          <Card key={article._id}>
             <div className="p-6">
               <div className="grid md:grid-cols-[1fr_200px] gap-6">
                 <div className="space-y-4">

@@ -4,12 +4,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { Button } from "./ui/Button"
 import { logout } from "../redux/slices/authSlice"
+import { RootState } from "../redux/store";
 
-function DashboardLayout({ children }) {
+function DashboardLayout({ children }: any) {
   const location = useLocation()
   const pathname = location.pathname
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ function DashboardLayout({ children }) {
                 alt="User"
                 className="h-8 w-8 rounded-full border"
               />
-              <span className="text-sm font-medium">{user.firstName} {user.lastName}</span>
+              { user && <span className="text-sm font-medium">{user.firstName} {user.lastName}</span> }
             </div>
             
           </div>

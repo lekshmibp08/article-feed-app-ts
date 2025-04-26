@@ -51,19 +51,15 @@ export interface Article {
     title: string;
     description: string;
     content?: string;
-    category: Category;
-    tags: string[];
+    category: string;
+    tags?: string[];
     imageUrl: string;
-    author: {
-      _id: string;
-      name: string;
-      
-    };
+    author: IUser;
     likes: string[];      
     dislikes: string[];   
     blocks: string[];     
     publishedAt: string;  
-    status: "Draft" | "Published";
+    status: "Draft" | "Published" | string;
     createdAt: string;
     updatedAt: string;
   
@@ -89,4 +85,7 @@ export interface IArticleErrors {
   tags?: string
 }
   
-  
+export interface IAuthor {
+  firstName: string;
+  lastName: string;
+}
