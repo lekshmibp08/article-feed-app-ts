@@ -9,27 +9,30 @@ import { Card } from "../components/ui/Card"
 import { Dialog } from "../components/ui/Dialog"
 import DashboardLayout from "../components/DashboardLayout"
 import { toggleLikeDislike } from '../utils/articleActions'
+import { RootState } from "../redux/store"
+import { Article } from "../types/types"
+
 
 function DashboardPage() {
-  const user = useSelector((state) => state.auth.user);
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedArticle, setSelectedArticle] = useState(null)
-  const [showDialog, setShowDialog] = useState(false)
+  const user = useSelector((state: RootState) => state.auth.user);
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null)
+  const [showDialog, setShowDialog] = useState<boolean>(false)
 
-  const openArticleDialog = (article) => {
+  const openArticleDialog = (article: Article) => {
     setSelectedArticle(article)
     setShowDialog(true)
   }
-  const preferences = user.preferences;
   
-  
+  const preferences = user?.preferences;
+    
   const fetchPrefferedArticle = async () => {
     console.log(preferences);
     setLoading(true);
     try {
       const response = await configAxios.get("/api/articles", {
-        params: { preferences: preferences.join(",") }
+        params: { preferences: preferences?.join(",") }
       });
       setArticles(response.data)
     } catch (error) {
@@ -43,7 +46,7 @@ function DashboardPage() {
     fetchPrefferedArticle();
   }, [user])
 
-  const handleBlockUnblock = async (articleId, isBlocked) => {
+  const handleBlockUnblock = async (articleId: string, isBlocked: boolean) => {
     try {
       const endpoint = isBlocked ? "/api/articles/unblock" : "/api/articles/block";
       const response = await configAxios.post(endpoint, { articleId });
@@ -73,7 +76,7 @@ function DashboardPage() {
           <p>No articles found.</p>
         ) : (
           articles.map((article) => (
-            <Card key={article.id}>
+            <Card key={article._id}>
               <div className="p-6">
                 <div className="grid md:grid-cols-[1fr_300px] gap-6">
                   <div className="space-y-4">
@@ -138,7 +141,7 @@ function DashboardPage() {
 
       {/* Article Dialog */}
       <Dialog isOpen={showDialog} onClose={() => setShowDialog(false)} title={selectedArticle?.title}>
-        {selectedArticle && (
+        {selectedArticle && user && (
           <div className="space-y-4">
             <p className="text-sm text-gray-500">
               By {selectedArticle.author.firstName} {selectedArticle.author.lastName} • { }
