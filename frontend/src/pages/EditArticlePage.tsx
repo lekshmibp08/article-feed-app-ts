@@ -14,25 +14,25 @@ import { Select } from "../components/ui/Select"
 import DashboardLayout from "../components/DashboardLayout"
 import uploadImageToCloudinary from "../services/cloudinaryService"
 import validateArticleForm from "../utils/validateArticleForm"
-
+import { IArticleFormData, IArticleErrors } from "../types/types";
 
 function EditArticlePage() {
-  const { id } = useParams()
+  const { id } = useParams<{ id: string }>()
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<IArticleFormData>({
     title: "",
     category: "",
     description: "",
     content: "",
     tags: "",
   });
-  const [imageFile, setImageFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [saveLoading, setSaveLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [errors, setErrors] = useState({})
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [saveLoading, setSaveLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Partial<IArticleErrors>>({})
 
 
   const fetchArticle = async () => {
@@ -54,7 +54,7 @@ function EditArticlePage() {
     fetchArticle();    
   }, [id])
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
@@ -62,14 +62,14 @@ function EditArticlePage() {
     }))
   }
 
-  const handleSelectChange = (value) => {
+  const handleSelectChange = (value: string) => {
     setFormData((prev) => ({
       ...prev,
       category: value,
     }))
   }
 
-  const handleImageChange = (e) => {
+  const handleImageChange = (e: any) => {
     const file = e.target.files[0];
     setImageFile(file);
   };
@@ -91,7 +91,7 @@ function EditArticlePage() {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
     console.log("Edit form submitted:", formData, imageUrl)
     const validationErrors = validateArticleForm(formData, imageUrl);
@@ -147,7 +147,7 @@ function EditArticlePage() {
                     { value: "entertainment", label: "Entertainment" },
                     { value: "science", label: "Science" },
                     { value: "business", label: "Business" },
-                  ]}
+                  ] as { value: string; label: string }[]}
                 />
                 {errors.category && <p className="text-red-500 text-sm">{errors.category}</p>}
               </div>
@@ -173,8 +173,8 @@ function EditArticlePage() {
                   onChange={handleChange}
                   className="min-h-[300px]"
                 />
-                {<errors className="cont"></errors> && <p className="text-red-500 text-sm">{errors.content}</p>}
-              </div>
+                {errors.content && <p className="text-red-500 text-sm">{errors.content}</p>}
+                </div>
 
               <div className="space-y-2">
                 <Label htmlFor="current-image">Current Image</Label>

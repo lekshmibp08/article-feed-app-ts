@@ -2,7 +2,7 @@ import { IArticleFormData, IArticleErrors } from "../types/types";
 
 const validateArticleForm = (
     formData: IArticleFormData, 
-    imageUrl: File | null
+    imageUrl: File | null | string
 ): Partial<IArticleErrors> => {
   let errors: Partial<IArticleErrors> = {};
 

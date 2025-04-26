@@ -9,7 +9,7 @@ interface ISelectProps {
   id: string;
   value: string;
   onValueChange: (value: string) => void;
-  placeholder: string;
+  placeholder?: string;
   options?: IOption[];
   className?: string;
 }
