@@ -7,6 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
 import { IUser } from "../types/types";
+import { sendOtp, verifyAndRegister } from '../api/userApi'
 
 Modal.setAppElement("#root"); 
 
@@ -81,7 +82,7 @@ const SignupForm: React.FC = () => {
     setError('');
     
     try {
-      const response = await configAxios.post('/api/send-otp', { email: values.email, phone: values.phone });
+      const response = await sendOtp({ email: values.email, phone: values.phone });
       setMessage(response.data.message);
       setStep(2); 
       setTimer(60); // Reset timer for 2 minutes
@@ -95,7 +96,7 @@ const SignupForm: React.FC = () => {
     setError('');
     setMessage('');
     try {
-      const response = await configAxios.post('/api/verify-and-register', values);
+      const response = await verifyAndRegister(values);
       setMessage(response.data.message);
       navigate('/login'); 
     } catch (err: any) {
