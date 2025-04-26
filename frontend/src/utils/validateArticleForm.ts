@@ -1,9 +1,18 @@
-const validateArticleForm = (formData, imageUrl) => {
-  let errors = {};
+import { IArticleFormData, IArticleErrors } from "../types/types";
+
+const validateArticleForm = (
+    formData: IArticleFormData, 
+    imageUrl: File | null
+): Partial<IArticleErrors> => {
+  let errors: Partial<IArticleErrors> = {};
 
   const tagsAsString = Array.isArray(formData.tags) ? formData.tags.join(", ") : formData.tags;
 
-  const validateField = (field, value, message) => {
+  const validateField = (
+    field: keyof IArticleErrors, 
+    value: string | null, 
+    message: string 
+) => {
       if (!value) {
           errors[field] = message;
       }

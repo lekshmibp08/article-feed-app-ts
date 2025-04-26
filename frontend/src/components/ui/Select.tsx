@@ -1,17 +1,31 @@
 import { useState, useRef, useEffect } from "react"
 
-function Select({ id, value, onValueChange, placeholder, options = [], className = "" }) {
+interface IOption {
+  value: string;
+  label: string;
+}
+
+interface ISelectProps {
+  id: string;
+  value: string;
+  onValueChange: (value: string) => void;
+  placeholder: string;
+  options?: IOption[];
+  className?: string;
+}
+
+function Select({ id, value, onValueChange, placeholder, options = [], className = "" }: ISelectProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedValue, setSelectedValue] = useState(value || "")
-  const selectRef = useRef(null)
+  const selectRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setSelectedValue(value || "")
   }, [value])
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (selectRef.current && !selectRef.current.contains(event.target)) {
+    function handleClickOutside(event: MouseEvent) {
+      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
         setIsOpen(false)
       }
     }
@@ -22,7 +36,7 @@ function Select({ id, value, onValueChange, placeholder, options = [], className
     }
   }, [])
 
-  const handleSelect = (option) => {
+  const handleSelect = (option: IOption) => {
     setSelectedValue(option.value)
     onValueChange && onValueChange(option.value)
     setIsOpen(false)

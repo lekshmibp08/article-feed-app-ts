@@ -1,4 +1,14 @@
+export type Category = 
+  | "Sports"
+  | "Politics"
+  | "Technology"
+  | "Space"
+  | "Health"
+  | "Entertainment"
+  | "Science"
+  | "Business";
 export interface IUser {
+  _id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -6,7 +16,7 @@ export interface IUser {
   password: string;
   confirmPassword: string;
   otp: string;
-  preferences: Array<"Sports" | "Politics" | "Technology" | "Space" | "Health" | "Entertainment" | "Science" | "Business">;
+  preferences: Category[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -35,4 +45,48 @@ export interface IPasswordChange {
   newPassword: string;
   confirmPassword: string;
 }
+
+export interface Article {
+    _id: string;
+    title: string;
+    description: string;
+    content?: string;
+    category: Category;
+    tags: string[];
+    imageUrl: string;
+    author: {
+      _id: string;
+      name: string;
+      
+    };
+    likes: string[];      
+    dislikes: string[];   
+    blocks: string[];     
+    publishedAt: string;  
+    status: "Draft" | "Published";
+    createdAt: string;
+    updatedAt: string;
+  
+    likesCount: number;
+    dislikesCount: number;
+    blocksCount: number;
+  }
+
+export interface IArticleFormData {
+  title: string
+  category: string
+  description: string
+  content: string
+  tags: string
+}  
+
+export interface IArticleErrors {
+  title?: string
+  category?: string
+  description?: string
+  content?: string
+  imageUrl?: string
+  tags?: string
+}
+  
   

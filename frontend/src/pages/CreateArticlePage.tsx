@@ -17,9 +17,11 @@ import uploadImageToCloudinary from "../services/cloudinaryService"
 import validateArticleForm from "../utils/validateArticleForm"
 import { useNavigate } from "react-router-dom"
 
+import { IArticleFormData, IArticleErrors } from "../types/types"
+import { RootState } from "../redux/store"
 
 function CreateArticlePage() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<IArticleFormData>({
     title: "",
     category: "",
     description: "",
@@ -27,15 +29,15 @@ function CreateArticlePage() {
     tags: "",
   })
 
-  const [imageFile, setImageFile] = useState(null)
-  const [imageUrl, setImageUrl] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [errors, setErrors] = useState({})
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imageUrl, setImageUrl] = useState<string>("")
+  const [loading, setLoading] = useState<boolean>(false)
+  const [errors, setErrors] = useState<Partial<IArticleErrors>>({})
 
-  const user = useSelector((state) => state.auth.user) 
+  const user = useSelector((state: RootState) => state.auth.user) 
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
@@ -43,7 +45,7 @@ function CreateArticlePage() {
     }))
   }
 
-  const handleImageChange = (e) => {
+  const handleImageChange = (e: any) => {
     const file = e.target.files[0]
     setImageFile(file)
   }
@@ -66,15 +68,19 @@ function CreateArticlePage() {
     }
   }
 
-  const handleSelectChange = (value) => {
+  const handleSelectChange = (value: string) => {
     setFormData((prev) => ({
       ...prev,
       category: value,
     }))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
+    if (!user) {
+      toast.error("You must be logged in to create an article!", { position: "top-center" });
+      return;
+    }
 
     const validationErrors = validateArticleForm(formData, imageFile);
     if(Object.keys(validationErrors).length > 0) {
@@ -109,11 +115,12 @@ function CreateArticlePage() {
 
   }
 
-  const handleSaveDraft = async (e) => {
-    console.log('====================================');
-    console.log("DRAFT");
-    console.log('====================================');
+  const handleSaveDraft = async (e: any) => {
     e.preventDefault()
+    if (!user) {
+      toast.error("You must be logged in to create an article!", { position: "top-center" });
+      return;
+    }
 
     const validationErrors = validateArticleForm(formData, imageFile);
     if(Object.keys(validationErrors).length > 0) {
@@ -188,7 +195,7 @@ function CreateArticlePage() {
                     { value: "Entertainment", label: "Entertainment" },
                     { value: "Science", label: "Science" },
                     { value: "Business", label: "Business" },
-                  ]}
+                  ] as { value: string; label: string }[]}
                 />
                 {errors.category && <p className="text-red-500 text-sm">{errors.category}</p>}
               </div>
@@ -216,7 +223,7 @@ function CreateArticlePage() {
                   placeholder="Write your article content here"
                   className="min-h-[300px]"
                 />
-                {<errors className="cont"></errors> && <p className="text-red-500 text-sm">{errors.content}</p>}
+                {errors.content && <p className="text-red-500 text-sm">{errors.content}</p>}
               </div>
 
               <div className="space-y-2">
