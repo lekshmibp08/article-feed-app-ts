@@ -1,23 +1,20 @@
 import axios from "axios"
-
-const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-const CLOUDINARY_API_URL = import.meta.env.VITE_CLOUDINARY_API_URL
+import { config } from "../config/config"
 
 
-const uploadImageToCloudinary = async (file) => {
+const uploadImageToCloudinary = async (file: File): Promise<string> => {
   if (!file) {
     throw new Error("No file selected")
   }
 
   const formData = new FormData()
   formData.append("file", file)
-  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET) 
-  formData.append("cloud_name", CLOUDINARY_CLOUD_NAME)
+  formData.append("upload_preset", config.CLOUDINARY_UPLOAD_PRESET) 
+  formData.append("cloud_name", config.CLOUDINARY_CLOUD_NAME)
 
   try {
     const response = await axios.post(
-        CLOUDINARY_API_URL,
+      config.CLOUDINARY_API_URL,
       formData
     )
     return response.data.secure_url 

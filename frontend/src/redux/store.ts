@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice"
 import storage from "redux-persist/lib/storage"; // Uses localStorage
 import { persistStore, persistReducer } from "redux-persist";
-import { combineReducers } from "redux";
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 
 
