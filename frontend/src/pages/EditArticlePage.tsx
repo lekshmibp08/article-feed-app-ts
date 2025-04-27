@@ -15,6 +15,9 @@ import DashboardLayout from "../components/DashboardLayout"
 import uploadImageToCloudinary from "../services/cloudinaryService"
 import validateArticleForm from "../utils/validateArticleForm"
 import { IArticleFormData, IArticleErrors } from "../types/types";
+import { 
+  fetchArticleById, updateArticle
+} from "../api/articleApi";
 
 function EditArticlePage() {
   const { id } = useParams<{ id: string }>()
@@ -36,21 +39,22 @@ function EditArticlePage() {
 
 
   const fetchArticle = async () => {
-    try {
-      const response = await configAxios.get(`/api/articles/${id}`);
-      const { 
-        title, category, description, content, tags, imageUrl 
-      } = response.data;
-      setFormData({ title, category, description, content, tags });
-      setImageUrl(imageUrl);
-    } catch (error) {
-      setError("Failed to load article.")
-      console.error("Error fetching articles:", error)
+    if(id) {
+      try {
+        const response = await fetchArticleById(id);
+        const { 
+          title, category, description, content, tags, imageUrl 
+        } = response.data;
+        setFormData({ title, category, description, content, tags });
+        setImageUrl(imageUrl);
+      } catch (error) {
+        setError("Failed to load article.")
+        console.error("Error fetching articles:", error)
+      }
     }
   }
 
   useEffect(() => {
-    console.log(`Fetching article with ID: ${id}`)
     fetchArticle();    
   }, [id])
 
@@ -100,8 +104,11 @@ function EditArticlePage() {
       return;
     }
     setSaveLoading(true) 
+    if(!id) {
+      return      
+    }
     try {
-      await configAxios.patch(`/api/articles/${id}`, {...formData, imageUrl});
+      await updateArticle(id, formData, imageUrl);
       toast.success("Article updated successfully!", { position: "top-center" });
       navigate("/dashboard/my-articles");
     } catch (error) {
