@@ -11,6 +11,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import { RootState } from "../redux/store";
 import { Article } from "../types/types"
+import { fetchUserArticles, deleteArticle, publishArticle } from "../api/articleApi";
 
 
 function MyArticlesPage() {
@@ -30,16 +31,17 @@ function MyArticlesPage() {
   }
 
   const fetchArticles = async () => {
-    if(user?._id) {
-      try {
-          const response = await configAxios.get(`/api/my-articles/${user._id}`);
-          setArticles(response.data);
-      } catch (error) {
-          setError("Failed to load articles.")
-          console.error("Error fetching articles:", error)
-      } finally {
-          setLoading(false)
-      }
+    if(!user?._id) {
+      return;
+    }
+    try {
+        const response = await fetchUserArticles(user._id);
+        setArticles(response.data);
+    } catch (error) {
+        setError("Failed to load articles.")
+        console.error("Error fetching articles:", error)
+    } finally {
+        setLoading(false)
     }
   }
 
@@ -52,7 +54,7 @@ function MyArticlesPage() {
   const handleDelete = async () => {
     if (!articleToDelete) return
     try {
-        await configAxios.delete(`/api/articles/${articleToDelete}`);
+        await deleteArticle(articleToDelete);
         setArticles((prevArticles) =>
             prevArticles.filter((article: Article) => article._id !== articleToDelete)
         );
@@ -66,7 +68,7 @@ function MyArticlesPage() {
 
   const handlePublish = async (articleId: string) => {
     try {
-      const response = await configAxios.patch(`/api/articles/publish/${articleId}`);
+      await publishArticle(articleId);
       
       setArticles((prevArticles) =>
         prevArticles.map((article) =>
@@ -214,7 +216,7 @@ function MyArticlesPage() {
                 : "No Tags"}
             </p>
 
-            {/* Like & Dislike Buttons */}
+            {/* Like Dislike & Blocks */}
             <div className="flex items-center gap-4">
               <span className="text-sm">Likes: {selectedArticle.likesCount}</span>
               <span className="text-sm">Dislikes: {selectedArticle.dislikesCount}</span>

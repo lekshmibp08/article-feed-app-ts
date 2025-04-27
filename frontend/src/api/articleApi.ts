@@ -19,3 +19,15 @@ export const fetchArticleById = (id: string) => {
 export const updateArticle = (id: string, formData: any, imageUrl: string) => {
   return configAxios.patch(`/api/articles/${id}`, { ...formData, imageUrl });
 };
+
+export const fetchUserArticles = (userId: string) => {
+  return configAxios.get(`/api/my-articles/${userId}`);
+};
+
+export const deleteArticle = (articleId: string) => {
+  return configAxios.delete(`/api/articles/${articleId}`);
+};
+
+export const publishArticle = (articleId: string) => {
+  return configAxios.patch(`/api/articles/publish/${articleId}`);
+};
