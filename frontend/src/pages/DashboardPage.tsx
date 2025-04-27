@@ -11,6 +11,7 @@ import DashboardLayout from "../components/DashboardLayout"
 import { toggleLikeDislike } from '../utils/articleActions'
 import { RootState } from "../redux/store"
 import { Article } from "../types/types"
+import { fetchPreferredArticles, blockArticle, unblockArticle } from "../api/articleApi"
 
 
 function DashboardPage() {
@@ -31,9 +32,7 @@ function DashboardPage() {
     console.log(preferences);
     setLoading(true);
     try {
-      const response = await configAxios.get("/api/articles", {
-        params: { preferences: preferences?.join(",") }
-      });
+      const response = await fetchPreferredArticles(preferences || []);
       setArticles(response.data)
     } catch (error) {
       
@@ -48,8 +47,7 @@ function DashboardPage() {
 
   const handleBlockUnblock = async (articleId: string, isBlocked: boolean) => {
     try {
-      const endpoint = isBlocked ? "/api/articles/unblock" : "/api/articles/block";
-      const response = await configAxios.post(endpoint, { articleId });
+      const response = isBlocked ? await unblockArticle(articleId) : await blockArticle(articleId);
     
       setSelectedArticle(response.data.article);
     } catch (error) {

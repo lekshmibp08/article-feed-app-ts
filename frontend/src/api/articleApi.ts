@@ -31,3 +31,17 @@ export const deleteArticle = (articleId: string) => {
 export const publishArticle = (articleId: string) => {
   return configAxios.patch(`/api/articles/publish/${articleId}`);
 };
+
+export const fetchPreferredArticles = (preferences: string[]) => {
+  return configAxios.get("/api/articles", {
+    params: { preferences: preferences.join(",") }
+  });
+};
+
+export const blockArticle = (articleId: string) => {
+  return configAxios.post("/api/articles/block", { articleId });
+};
+
+export const unblockArticle = (articleId: string) => {
+  return configAxios.post("/api/articles/unblock", { articleId });
+};
