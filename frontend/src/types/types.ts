@@ -7,6 +7,7 @@ export type Category =
   | "Entertainment"
   | "Science"
   | "Business";
+  
 export interface IUser {
   _id: string;
   firstName: string;

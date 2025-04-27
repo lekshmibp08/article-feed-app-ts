@@ -10,18 +10,23 @@ import { Label } from "../components/ui/Label"
 import { Checkbox } from "../components/ui/Checkbox"
 import { Tabs } from "../components/ui/Tabs"
 import DashboardLayout from "../components/DashboardLayout"
+import { updateUser } from "../redux/slices/authSlice";
+import { RootState } from "../redux/store";
 import { 
   validatePersonalInfo, 
   validatePasswordChange, 
   validatePreferences 
 } from "../utils/validateUserInfo";
-import { updateUser } from "../redux/slices/authSlice";
-import { RootState } from "../redux/store";
 import { 
   Category, 
   IPasswordChange,
   IPersonalInfo 
 } from "../types/types";
+import { 
+  updatePersonalInfo, 
+  changeUserPassword, 
+  updateUserPreferences 
+} from "../api/userApi";
 
 function SettingsPage() {
   const user = useSelector((state: RootState) => state.auth.user)
@@ -91,7 +96,7 @@ function SettingsPage() {
       return;
     }
     try {
-      const response = await configAxios.patch("/api/users/update-profile", personalInfo); 
+      const response = await updatePersonalInfo(personalInfo); 
       dispatch(updateUser(response.data.user));     
       toast.success("Personal info Updated Successfully!", { position: "top-center" });
     } catch (error) {      
@@ -106,7 +111,7 @@ function SettingsPage() {
       return;
     }
     try {
-      const response = await configAxios.patch("/api/users/change-password", passwordInfo);   
+      const response = await changeUserPassword(passwordInfo);   
       setPasswordInfo({
         currentPassword: "",
         newPassword: "",
@@ -125,7 +130,7 @@ function SettingsPage() {
       return;
     }
     try {
-      const response = await configAxios.patch("/api/users/update-preferences", { preferences: selectedCategories });
+      const response = await updateUserPreferences({ selectedCategories });
       toast.success("Preferences Updated Successfully!", { position: "top-center" });
       dispatch(updateUser(response.data.user));
     } catch (error) {
