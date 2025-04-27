@@ -19,6 +19,10 @@ import { useNavigate } from "react-router-dom"
 
 import { IArticleFormData, IArticleErrors } from "../types/types"
 import { RootState } from "../redux/store"
+import { 
+  createArticle,
+  draftArticle 
+} from "../api/articleApi"
 
 function CreateArticlePage() {
   const [formData, setFormData] = useState<IArticleFormData>({
@@ -100,9 +104,7 @@ function CreateArticlePage() {
     }    
 
     try {
-      const response = await configAxios.post('/api/create-article', {
-        articleData,
-      })
+      const response = await createArticle(articleData);
       console.log("Article published:", response.data)
       toast.success("Article successfully published!", { position: "top-center" });  
       navigate("/dashboard/my-articles");      
@@ -140,9 +142,7 @@ function CreateArticlePage() {
     }    
 
     try {
-      const response = await configAxios.post('/api/draft-article', {
-        articleData,
-      })
+      const response = await draftArticle( articleData )
       console.log("Article drafted:", response.data)
       toast.success("Article successfully drafted!", { position: "top-center" });  
       navigate("/dashboard/my-articles");      
