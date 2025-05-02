@@ -1,0 +1,22 @@
+// repositories/UserRepository.ts
+import { IUserRepository } from "../../../application/interfaces/IUserRepository"; 
+import User from "../models/userModel"; 
+import { IUser } from "../../../domain/entities/IUser"; 
+
+export class UserRepository implements IUserRepository {
+  async findByEmail(email: string): Promise<IUser | null> {
+    return await User.findOne({ email }) as IUser;
+  }
+
+  async findByPhone(phone: string): Promise<IUser | null> {
+    return await User.findOne({ phone }) as IUser;
+  }
+
+  async createUser(user: IUser): Promise<IUser> {
+    return await User.create(user);
+  }
+
+  async findById(id: string): Promise<IUser | null> {
+    return await User.findById(id).select("-password") as IUser;
+  }
+}

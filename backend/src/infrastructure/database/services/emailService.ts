@@ -3,7 +3,11 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export const sendEmail = async (to, subject, text) => {
+export const sendEmail = async (
+    to: string, 
+    subject: string, 
+    text: string
+): Promise<void> => {
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -20,8 +24,8 @@ export const sendEmail = async (to, subject, text) => {
       text,
     });
 
-    console.log(`📧 Email sent to ${to}`);
+    console.log(`Email sent to ${to}`);
   } catch (error) {
-    console.error("❌ Email sending failed:", error);
+    console.error("Email sending failed:", error);
   }
 };

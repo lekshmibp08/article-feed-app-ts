@@ -3,7 +3,7 @@ import {
     sendOtp,
     verifyOtpAndRegisterUser,
     userLogin 
-} from "../controllers/authController.js";
+} from '../controllers/authController'
 
 const router = express.Router();
 

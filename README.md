@@ -44,3 +44,16 @@ This is a **MERN stack** web application that allows users to read, create, and 
 -
     
 updated
+
+
+
+PORT=4000
+MONGODB_URL="mongodb+srv://sreelekshmi310192:2Df2AxN7YM6sa1qi@article-feed-web-app.8vhpo.mongodb.net/?retryWrites=true&w=majority&appName=article-feed-web-app"
+FRONT_END_URL = "http://localhost:5173"
+
+
+EMAIL_USER="sreelekshmi310192@gmail.com"
+EMAIL_PASS="cbhm cuky kldp trin"
+
+JWT_SECRET='Secret'
+JWT_REFRESH_SECRET='RefreshSecret'
