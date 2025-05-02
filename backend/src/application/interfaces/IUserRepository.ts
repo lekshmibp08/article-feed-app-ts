@@ -6,4 +6,5 @@ export interface IUserRepository {
   findByPhone(phone: string): Promise<IUser | null>;
   createUser(user: IUser): Promise<IUser>;
   findById(id: string | Types.ObjectId): Promise<IUser | null>;
+  updateUser(userId: string | Types.ObjectId, updateData: any): Promise<IUser | null >;
 }

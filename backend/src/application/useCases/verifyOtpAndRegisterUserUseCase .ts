@@ -1,7 +1,7 @@
 import { HttpStatusCode } from "../../enums/HttpStatusCode";
 import { IUserRepository } from "../interfaces/IUserRepository";
 import { IOtpRepository } from "../interfaces/IOtpRepository";
-import bcrypt from "bcryptjs";
+import bcrypt from 'bcrypt';
 import { IUser } from "../../domain/entities/IUser"; 
 
 export const verifyOtpAndRegisterUserUseCase = async (

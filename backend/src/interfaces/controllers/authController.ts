@@ -36,10 +36,13 @@ export const userLogin = async (req: Request, res: Response, next: NextFunction)
 
     const identifier = email || phone;
     if (!identifier || !password) {
-      throw {statusCode: HttpStatusCode.BAD_REQUEST, message:"Missing credentials"};
+      throw {
+        statusCode: HttpStatusCode.BAD_REQUEST, 
+        message:"Missing credentials"
+      };
     }
 
-    const { token, refreshToken, user } = await userUseCases.login(identifier, password);
+    const { token, refreshToken, userData } = await userUseCases.login(identifier, password);
 
     res.cookie("refresh_token", refreshToken, {
       httpOnly: true,
@@ -51,7 +54,7 @@ export const userLogin = async (req: Request, res: Response, next: NextFunction)
     res.status(HttpStatusCode.OK).json({
       message: "Login successful",
       token,
-      user,
+      userData,
     });
 
   } catch (error) {

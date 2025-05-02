@@ -10,6 +10,7 @@ import { errorHandler } from "./interfaces/middleware/errorMiddleware"
 
 
 import authRoutes from './interfaces/routes/authRoutes'
+import userRoutes from './interfaces/routes/userRoutes'
 
 
 const app = express();
@@ -30,6 +31,7 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 
 app.use('/api', authRoutes);
+app.use('/api', userRoutes);
 
 
 app.get("/", (req, res) => {
