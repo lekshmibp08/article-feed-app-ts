@@ -130,7 +130,7 @@ function SettingsPage() {
       return;
     }
     try {
-      const response = await updateUserPreferences({ selectedCategories });
+      const response = await updateUserPreferences( selectedCategories );
       toast.success("Preferences Updated Successfully!", { position: "top-center" });
       dispatch(updateUser(response.data.user));
     } catch (error) {
