@@ -8,8 +8,8 @@ export const createArticle = (articleData: IArticleFormData) => {
     return configAxios.post('/api/create-article', {articleData});
 };
 
-export const draftArticle = (articleData: IArticleFormData) => {
-    return configAxios.post('/api/create-article', {articleData});
+export const draftArticle = (articleData: IArticleFormData) => {  
+    return configAxios.post('/api/draft-article', {articleData});
 };
 
 export const fetchArticleById = (id: string) => {

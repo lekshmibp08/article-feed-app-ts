@@ -53,5 +53,42 @@ export class UserUseCases {
   ): Promise<IUser | null> {
     const updatedUser = await this.userRepository.updateUser(userId, personalInfo);
     return updatedUser;
-  }   
+  }  
+  async resetPassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string,    
+  ): Promise<void> {
+    if (!userId || !currentPassword || !newPassword) {
+      throw {
+        statusCode: HttpStatusCode.BAD_REQUEST,
+        message: "Missing required fields",
+      };
+    }
+    const user = await this.userRepository.findById(userId);
+    if(!user) {
+      throw {
+        statusCode: HttpStatusCode.NOT_FOUND,
+        message: 'User not found'
+      }
+    }
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if(!isMatch) {
+      throw {
+        statusCode: HttpStatusCode.BAD_REQUEST,
+        message: 'Current password is incorrect'
+      }
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await this.userRepository.updateUser(userId, {
+      password: hashedPassword
+    });
+  }
+  async updatePreferences(
+    userId: string,
+    preferences: any,    
+  ): Promise<IUser | null> {
+    const updatedUser = await this.userRepository.updateUser(userId, { preferences });
+    return updatedUser
+  }
 }

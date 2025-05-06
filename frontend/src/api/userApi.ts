@@ -30,6 +30,6 @@ export const changeUserPassword = (passwordInfo: IPasswordChange) => {
 };
 
 export const updateUserPreferences = (preferences: any) => {
-  return configAxios.patch("/api/users/update-preferences", { preferences });
+  return configAxios.patch("/api/users/update-preferences",  preferences );
 };
 

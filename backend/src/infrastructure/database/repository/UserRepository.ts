@@ -1,4 +1,3 @@
-// repositories/UserRepository.ts
 import { IUserRepository } from "../../../application/interfaces/IUserRepository"; 
 import User from "../models/userModel"; 
 import { IUser } from "../../../domain/entities/IUser"; 

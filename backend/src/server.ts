@@ -11,7 +11,7 @@ import { errorHandler } from "./interfaces/middleware/errorMiddleware"
 
 import authRoutes from './interfaces/routes/authRoutes'
 import userRoutes from './interfaces/routes/userRoutes'
-
+import articleRoutes from './interfaces/routes/articleRoutes'
 
 const app = express();
 const PORT = config.app.PORT || 4000;
@@ -32,6 +32,7 @@ app.use(morgan("dev"));
 
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
+app.use('/api', articleRoutes);
 
 
 app.get("/", (req, res) => {
