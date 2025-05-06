@@ -209,7 +209,7 @@ function MyArticlesPage() {
             <p className="flex flex-wrap gap-2 text-sm text-blue-600 font-medium">
               {Array.isArray(selectedArticle?.tags) && selectedArticle.tags.length > 0
                 ? selectedArticle.tags[0].split(",").map((tag, index) => (
-                    <span key={index} className="bg-blue-100 px-2 py-1 rounded-md">
+                    <span key={index} className="py-1 rounded-md">
                       #{tag.trim()}
                     </span>
                   ))
