@@ -25,7 +25,7 @@ interface IMailer{
     EMAIL_USER: string;
 }
 
- interface IConfig {
+interface IConfig {
     app: IApp
     mongodb: IMongodb 
     cors: ICors
