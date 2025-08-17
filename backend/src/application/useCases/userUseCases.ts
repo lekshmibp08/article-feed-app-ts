@@ -1,18 +1,19 @@
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
+import { IUserUseCases } from "./interfaces/IUserUseCase";
 import { IUserRepository } from "../interfaces/IUserRepository";
 import { IUser } from "../../domain/entities/IUser";
-import { HttpStatusCode } from '../../enums/HttpStatusCode';
-import { 
-    generateAccessToken, 
-    generateRefreshToken 
+import { HttpStatusCode } from "../../enums/HttpStatusCode";
+import {
+  generateAccessToken,
+  generateRefreshToken,
 } from "../../utils/jwtUtils";
-import { Types } from 'mongoose';
+import { Types } from "mongoose";
 
-export class UserUseCases {
+export class UserUseCases implements IUserUseCases {
   constructor(private userRepository: IUserRepository) {}
 
   async login(
-    identifier: string, 
+    identifier: string,
     password: string
   ): Promise<{
     token: string;
@@ -24,16 +25,25 @@ export class UserUseCases {
       (await this.userRepository.findByPhone(identifier));
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      throw {statusCode: HttpStatusCode.UNAUTHORIZED, message:"Invalid credentials"};
+      throw {
+        statusCode: HttpStatusCode.UNAUTHORIZED,
+        message: "Invalid credentials",
+      };
     }
 
     const token = generateAccessToken({ id: user._id, email: user.email });
 
-    const refreshToken = generateRefreshToken({ id: user._id, email: user.email });
+    const refreshToken = generateRefreshToken({
+      id: user._id,
+      email: user.email,
+    });
 
     const safeUser = await this.userRepository.findById(user._id);
     if (!safeUser) {
-        throw {statusCode: HttpStatusCode.NOT_FOUND, message:"User data retrieval failed"};
+      throw {
+        statusCode: HttpStatusCode.NOT_FOUND,
+        message: "User data retrieval failed",
+      };
     }
 
     return {
@@ -45,19 +55,22 @@ export class UserUseCases {
   async updatePersonalInfo(
     userId: string | Types.ObjectId,
     personalInfo: {
-      firstName?: string; 
-      lastName?: string; 
-      email?: string; 
-      phone?: string
+      firstName?: string;
+      lastName?: string;
+      email?: string;
+      phone?: string;
     }
   ): Promise<IUser | null> {
-    const updatedUser = await this.userRepository.updateUser(userId, personalInfo);
+    const updatedUser = await this.userRepository.updateUser(
+      userId,
+      personalInfo
+    );
     return updatedUser;
-  }  
+  }
   async resetPassword(
     userId: string,
     currentPassword: string,
-    newPassword: string,    
+    newPassword: string
   ): Promise<void> {
     if (!userId || !currentPassword || !newPassword) {
       throw {
@@ -66,29 +79,31 @@ export class UserUseCases {
       };
     }
     const user = await this.userRepository.findById(userId);
-    if(!user) {
+    if (!user) {
       throw {
         statusCode: HttpStatusCode.NOT_FOUND,
-        message: 'User not found'
-      }
+        message: "User not found",
+      };
     }
     const isMatch = await bcrypt.compare(currentPassword, user.password);
-    if(!isMatch) {
+    if (!isMatch) {
       throw {
         statusCode: HttpStatusCode.BAD_REQUEST,
-        message: 'Current password is incorrect'
-      }
+        message: "Current password is incorrect",
+      };
     }
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await this.userRepository.updateUser(userId, {
-      password: hashedPassword
+      password: hashedPassword,
     });
   }
   async updatePreferences(
     userId: string,
-    preferences: any,    
+    preferences: any
   ): Promise<IUser | null> {
-    const updatedUser = await this.userRepository.updateUser(userId, { preferences });
-    return updatedUser
+    const updatedUser = await this.userRepository.updateUser(userId, {
+      preferences,
+    });
+    return updatedUser;
   }
 }
